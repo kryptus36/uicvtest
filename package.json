@@ -4,17 +4,26 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@nativescript-community/ui-collectionview": "^5.0.3",
     "@nativescript/core": "~8.5.0",
     "@nativescript/theme": "~3.0.2",
+    "dayjs": "^1.11.7",
     "svelte-native": "~1.0.0"
   },
   "devDependencies": {
-    "@nativescript/types": "~8.5.0",
-    "@nativescript/webpack": "~5.0.14",
-    "svelte": "~3.44.0",
-    "svelte-loader": "^3.1.2",
+    "@nativescript-dom/core-types": "^1.0.16",
+    "@nativescript-dom/svelte-types": "^1.0.3",
+    "@nativescript/android": "8.4.0",
+    "@nativescript/ios": "^8.4.0",
+    "@nativescript/types": "~8.4.0",
+    "@nativescript/webpack": "~5.0.12",
+    "@types/node": "^18.11.3",
+    "eslint": "^6.1.1",
+    "sass": "^1.55.0",
+    "svelte": "^3.55.1",
+    "svelte-loader": "^3.1.7",
     "svelte-native-preprocessor": "^1.0.0",
-    "svelte-preprocess": "^4.7.0",
-    "typescript": "~4.8.4"
+    "svelte-preprocess": "^5.0.0",
+    "typescript": "^4.9.4"
   }
 }
