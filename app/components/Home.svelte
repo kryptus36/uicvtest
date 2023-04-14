@@ -7,7 +7,7 @@
   let list: any;
 
   function templateSelector(item, index, items) {
-    return 'pot';
+    return item.template;
   }
 
   const humanDate = function (date) {
@@ -151,9 +151,7 @@
               <label class="info" text="{i.info}" textWrap="true" visibility="{ i.info ? 'visible' : 'collapsed' }" />
               <flexboxLayout flexDirection="row" width="100%" justifyContent="space-between">
                 <stackLayout orientation="horizontal">
-                  
-                    <image src="{ `~/assets/images/balls-lettered/N45` + `.png` }" margin="10" height="50"  />
-                  
+          
                 </stackLayout>
                 <label textAlignment="right" verticalAlignment="bottom" textWrap="true">
                   <formattedString>
@@ -168,7 +166,49 @@
 </gridLayout>
 </page>
 
-<style>
+<style lang="scss">
+
+
+.venue-detail {
+  font-size: 16;
+  padding: 5;
+  
+}
+
+.event-list {
+  color: white;
+
+  .disclaimer {
+    font-size: 10;
+    font-style: italic;
+    padding: 5;
+  }
+
+  .promotion {
+    background: #e65239;
+    color: white;
+    text-align: center;
+    padding: 10 0 10 0;
+  }
+
+  .promotion .title {
+    font-size: 30;
+    font-weight: 900;
+    font-style: italic;
+    font-family: Righteous-Regular;
+    line-height: 3;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .event {
+    background-image: url('~/assets/images/bgdark.png');
+    text-align: center;
+    padding: 5;
+    font-weight: 800;
+    color: white;
+  }
+
   .pot {
     background: linear-gradient(
       0deg,
@@ -178,4 +218,10 @@
     padding: 5;
     color: white;
   }
+
+  .playoff {
+    color: yellow;
+  }
+}
+
 </style>
