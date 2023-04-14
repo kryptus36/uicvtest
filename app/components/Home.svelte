@@ -1,7 +1,10 @@
 <script lang="ts">
   import { Template } from 'svelte-native/components'
-  import { data } from '~/data';
+  import { events, promotions } from '~/data';
   import dayjs from 'dayjs';
+
+  let processing = false;
+  let list: any;
 
   function templateSelector(item, index, items) {
     return 'pot';
@@ -40,12 +43,101 @@
       return ' (' + formatPrize(n) + ')';
     }
   };
+
+  async function createList() {
+    processing = true;
+
+    const newList: any[] = [];
+
+    newList.push({
+      template: 'venue-detail',
+      address: 'test',
+      locality: 'test',
+      region: 'test',
+      website: 'test',
+      phone: 'test',
+    });
+
+    promotions.results.forEach((promotion) => {
+      if (!promotion.categories['pots']) return;
+
+      newList.push({
+        template: 'promotion',
+        title: promotion.title,
+        description: promotion.description,
+      });
+    });
+
+    events.results.forEach((event) => {
+      newList.push({
+        template: 'event',
+        name: event.name,
+        date: event.date,
+        caller: event.caller,
+        other: event.other,
+        times: event.times,
+      });
+
+      event.pots.forEach((pot) => {
+        const balls: any[] = [];
+        pot.meta.forEach((meta) => {
+          if(meta.type == 'Ball') {
+            balls.push(meta.value);
+          }
+        });
+        
+        newList.push({
+          template: 'pot',
+          name: pot.name,
+          numbers: pot.inNumbers,
+          prize: pot.prize,
+          playoffDate: pot.playoffDate,
+          playoffEvent: pot.playoffEvent,
+          playoffPrize: pot.playoffPrize,
+          info: pot.info,
+          balls
+        });
+      });
+    });
+
+    list = newList;
+
+    processing = false;
+  }
 </script>
 
-<page>
+<page on:navigatedTo={createList}>
 <gridLayout rows="*" backgroundColor='red' height='100%'>
-<collectionView class='event-list main-bg' row="1" height="100%" items={ data.results[0].pots } itemTemplateSelector={templateSelector}>
-  <Template let:item={i} key="pot">
+<collectionView class='event-list main-bg'  height="100%" items={ list } itemTemplateSelector="{ templateSelector }">
+        <Template let:item={i} key="venue-detail">
+          <stackLayout class='venue-detail'>
+            <!--label text="{address}" />
+                  <label text="{ website }" />
+                  <label text="{ phone }" /-->
+            <label text="For informational purposes only. In case of a discrepancy between this app and pot information posted in the bingo hall the latter shall be deemed correct." textWrap="true" class='disclaimer' />
+          </stackLayout>
+        </Template>
+        <Template let:item={i} key="promotion">
+            <stackLayout class='promotion'>
+              <label text="{  i.title  }" class='title' textWrap='true' />
+              <label text="{  i.description  }" class='description' textWrap='true' />
+            </stackLayout>
+          </Template>
+          <Template let:item={i} key="event">
+            <stackLayout class="event">
+              <label column="1" class="event-name" textWrap="true">
+                <formattedString>
+                  <span text="{i.name}" />
+                  <span text=" - " />
+                  <span text="{ humanDate(i.date) }" />
+                </formattedString>
+              </label>
+              <label text="{ 'Caller: ' + i.caller}" class="event-caller" textWrap="true" />
+              <label text="{ i.times }" class="event-times" textWrap="true" />
+              <label text="{ i.other }" class="event-other" visibility="{ i.other ? 'visible' : 'collapsed' }" textWrap="true" />
+            </stackLayout>
+          </Template>
+          <Template let:item={i} key="pot">
             <stackLayout class="pot">
               <label text="{i.name}" textWrap="true" />
               <label class="playoff" textWrap="true" visibility="{ i.playoffDate ? 'visible' : 'collapsed' }">
@@ -59,11 +151,9 @@
               <label class="info" text="{i.info}" textWrap="true" visibility="{ i.info ? 'visible' : 'collapsed' }" />
               <flexboxLayout flexDirection="row" width="100%" justifyContent="space-between">
                 <stackLayout orientation="horizontal">
-                  {#each i.meta as meta}
-                    {#if meta.type == 'Ball'}
-                    <image src="{ `~/assets/images/balls-lettered/` + meta.value + `.png` }" margin="10" height="50" visibility="{ meta.vaue != '0' ? 'visible' : 'collapsed' }" />
-                    {/if}
-                  {/each}
+                  
+                    <image src="{ `~/assets/images/balls-lettered/N45` + `.png` }" margin="10" height="50"  />
+                  
                 </stackLayout>
                 <label textAlignment="right" verticalAlignment="bottom" textWrap="true">
                   <formattedString>
@@ -74,7 +164,7 @@
               </flexboxLayout>
             </stackLayout>
           </Template>
-</collectionView>
+      </collectionView>
 </gridLayout>
 </page>
 
